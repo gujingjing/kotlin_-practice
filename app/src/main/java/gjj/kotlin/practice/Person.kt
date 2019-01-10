@@ -11,7 +11,7 @@ class Person {
 
     var name:String by Delegates.observable(""){
         property, oldValue, newValue ->
-        Log.e("Person-","oldValue-$oldValue-newValue-$newValue")
+        logE(this,"oldValue-$oldValue-newValue-$newValue")
     }
     var age:Int=0
 

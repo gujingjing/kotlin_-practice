@@ -2,20 +2,34 @@ package gjj.kotlin.practice
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import kotlin.properties.Delegates
+import android.view.View
+import android.widget.Switch
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.reflect.KProperty
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-//    val person:Person by Delegates.observable()
     var person:Person by MyDelegate(Person())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        delegateTest()
+        proptyDele.setOnClickListener(this)
+
+    }
+
+    override fun onClick(v: View?) {
+
+        if(v==null) return
+
+        when(v.id){
+            //属性委托
+            R.id.proptyDele->{
+                delegateTest()
+            }
+
+        }
     }
 
     /**
@@ -27,21 +41,19 @@ class MainActivity : AppCompatActivity() {
         person=Person("test",10)
     }
 
-    class MyDelegate<in R, T> (initialValue: T){
+    inner class MyDelegate<in R, T> (initialValue: T){
 
         var value:T = initialValue
 
         operator fun getValue(thisRef: R, property: KProperty<*>): T {
-            println(this.value?.toString())
-            Log.e("MyDelegate-getValue-",this.value.toString())
+            logE(this@MainActivity,this.value.toStringNoNull())
             return this.value
         }
 
         operator fun setValue(thisRef: R, property: KProperty<*>, value: T) {
 
             this.value=value
-            Log.e("MyDelegate-setValue-",this.value.toString())
-            println("$value has been assigned to '${property.name} in $thisRef.'")
+            logE(this@MainActivity,this.value.toStringNoNull())
         }
 
     }
